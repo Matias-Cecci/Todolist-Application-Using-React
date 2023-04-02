@@ -6,7 +6,6 @@ const Home = () => {
 
 	return (
 		<div className="col-6 mx-auto">
-			
 			<TodoList/>
 		</div>
 	);

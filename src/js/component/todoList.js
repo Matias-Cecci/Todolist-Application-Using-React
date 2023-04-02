@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Title from "./title"
 
 function TodoList () {
 
@@ -9,9 +8,24 @@ function TodoList () {
         setTaskList([]);
     }
 
+    const taskDone = (index) => {
+        setTaskList(taskList.map((task, i) => {
+          if (i === index) {
+            return { ...task, done: !task.done };
+          } else {
+            return task;
+          }
+        }));
+      };
+
+    const countUncompletedTasks = () => {
+        return taskList.filter((task) => !task.done).length;
+      };
+    
+
     return(
         <div className="container d-flex justify-content-center flex-column text-center mt-5">
-            <Title/>
+            <h1 className="my-3">TO DO LIST</h1>
             <input  
                 type="text" 
                 className="form-control text-wrap" 
@@ -27,20 +41,25 @@ function TodoList () {
                 {taskList.map((element, index) => {
                 return (
                     <li key={index} 
-                        className="list-group-item rounded-0 border d-flex justify-content-between align-items-center task-none">
-                            {element.label}
+                    className={`list-group-item rounded-0 border d-flex justify-content-between align-items-center `}>                  
+                            <span onClick={() => taskDone(index)} className={element.done ? "text-decoration-line-through" : ""} >{element.label} </span>
                             <i type='button' onClick={() => {
                                 setTaskList(taskList.filter((e , i) => i != index))
                             }}
-                            className="fa-regular fa-circle-xmark">
+                            className="fa-solid fa-trash">
                             </i>
                     </li>
                     );
                     })}
-                    <li className="list-group-item rounded-0 border text-start text-muted text-wrap"><small>{taskList.length} {taskList.length == 1 ? "item" : "items" } left</small></li>
+                    <li className="list-group-item rounded-0 border text-start text-muted text-wrap fst-italic fs-6">   
+                        <small>      
+                            {countUncompletedTasks()}{" "}
+                            {countUncompletedTasks() === 1 ? "task" : "tasks"} left
+                        </small>    
+                    </li>
             </ul>
             <div className="row justify-content-center">
-                <button type="button" className="btn btn-primary p-2 mt-3 col-md-4" onClick={deleteAll}>Delete all TASK</button>
+                <button type="button" className="btn btn-warning p-2 mt-3 col-md-4" onClick={deleteAll}>Delete all TASK</button>
             </div>
         </div>
     )
